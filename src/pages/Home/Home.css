@@ -16,7 +16,7 @@
     background-color: transparent;
     border: none;
     border-bottom: 3px solid var(--text-color-primary);
-    font-size: 3rem;
+    font-size: 3rem; 
     color: var(--text-color-primary);
     width: 45vw;    
     text-align: center;
