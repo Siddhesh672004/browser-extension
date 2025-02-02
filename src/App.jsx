@@ -1,6 +1,7 @@
 import './App.css'
 import { images } from "./db/images";
 import { Home } from "./pages/Home/Home.jsx";
+import { Task } from "./pages/Task/Task.jsx";
 import { useBrowser }  from "./context/browser-context.jsx";
 
 function App() {
@@ -14,9 +15,9 @@ function App() {
 
   return (
       <div className="app" style={{backgroundImage: `url("${bgImage}")`}}>
-        <Home />
+        {name ? <Task /> : <Home />}
       </div>
-  )
+  );
 }
 
 export default App

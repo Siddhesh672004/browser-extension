@@ -1,9 +1,9 @@
-export const browserReducer = (state, action) => {
-    switch (action.type) {
+export const browserReducer = (state, {type, payload}) => {
+    switch (type) {
         case "NAME":
             return {
                 ...state,
-                name: action.payload
+                name: payload
             }
         default:
             return state;
