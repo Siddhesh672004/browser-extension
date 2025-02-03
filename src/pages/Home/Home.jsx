@@ -16,6 +16,7 @@ export const Home = () => {
         type: "NAME",
         payload: event.target.value
       })
+      localStorage.setItem("name", event.target.value);
     }
   }
 
