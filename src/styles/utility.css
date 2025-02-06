@@ -20,6 +20,9 @@ body {
     cursor: pointer;
 }
 
+.cursor:hover{
+    cursor: pointer;
+}
 
 .d-flex {
     display: flex;

@@ -26,7 +26,7 @@ export const Home = () => {
       <div className="user-details d-flex direction-column =">
         <span className="heading-1">Hello, What's your name?</span> <br />
         <form onSubmit={handleFormSubmit}>
-          <input className="input" onKeyDown={handleNameChange}/>
+          <input required className="input" onKeyDown={handleNameChange}/>
         </form>
       </div>
     </div>
