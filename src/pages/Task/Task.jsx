@@ -2,28 +2,35 @@ import "./Task.css";
 import { useBrowser } from "../../context/browser-context";
 import { Fragment, useEffect, useState } from "react";
 import { quotes } from "../../db/quotes";
+import { Todo } from "../../components/Todo/Todo";
 
 const index = Math.floor(Math.random() * quotes.length);
 const quote = quotes[index].quote;
 
 export const Task = () => {
-
   const [isChecked, setIsChecked] = useState(false);
+  const [isTodoOpen, setIsTodoOpen] = useState(false);
+
 
   const { name, time, message, browserDispatch, task } = useBrowser();
 
   useEffect(() => {
     const userTask = localStorage.getItem("task");
-        browserDispatch({
-            type: "TASK",
-            payload: userTask
-        });
-     }, [])
+    browserDispatch({
+      type: "TASK",
+      payload: userTask,
+    });
+    if (new Date().getDate() !== Number(localStorage.getItem("date"))){
+      localStorage.removeItem("task");
+      localStorage.removeItem("date");
+      localStorage.removeItem("checkedStatus");
+    }
+  }, []);
 
-     useEffect(() => {
-        const checkStatus = localStorage.getItem("checkedStatus");
-        checkStatus === "true" ? setIsChecked(true) : setIsChecked(false)
-     }, [])
+  useEffect(() => {
+    const checkStatus = localStorage.getItem("checkedStatus");
+    checkStatus === "true" ? setIsChecked(true) : setIsChecked(false);
+  }, []);
 
   useEffect(() => {
     getCurrentTime();
@@ -68,22 +75,26 @@ export const Task = () => {
   };
 
   const handleCompleteTaskChange = (event) => {
-    if(event.target.checked){
-        setIsChecked(isChecked => !isChecked)
-    }else{
-        setIsChecked(isChecked => !isChecked)
+    if (event.target.checked) {
+      setIsChecked((isChecked) => !isChecked);
+    } else {
+      setIsChecked((isChecked) => !isChecked);
     }
-    localStorage.setItem("checkedStatus", !isChecked)
-  }
+    localStorage.setItem("checkedStatus", !isChecked);
+  };
 
   const handleClearClick = () => {
     browserDispatch({
-      type: "CLEAR"
+      type: "CLEAR",
     });
     setIsChecked(false);
     localStorage.removeItem("task");
     localStorage.removeItem("checkedStatus");
-    }
+  };
+
+  const handleToDoClick = () => {
+    setIsTodoOpen(isTodoOpen => !isTodoOpen);
+  }
 
   return (
     <div className="task-container d-flex direction-column align-center gap">
@@ -94,7 +105,9 @@ export const Task = () => {
 
       {name !== null && task === null ? (
         <Fragment>
-          <span className="focus-question">What is your main focus for today?</span>
+          <span className="focus-question">
+            What is your main focus for today?
+          </span>
           <form onSubmit={handleFormSubmit}>
             <input
               required
@@ -107,20 +120,33 @@ export const Task = () => {
         <div className="user-task-container d-flex direction-column align-center gap-sm">
           <span className="heading-2">Today's Focus</span>
           <div className="d-flex align-center gap cursor">
-            <label className={`${isChecked ? "strike-through" : ""} heading-3 d-flex align-center gap-sm cursor`}> 
-                <input className="check cursor" type="checkbox" onChange={handleCompleteTaskChange} checked={isChecked}/>
-                 {task}
+            <label
+              className={`${
+                isChecked ? "strike-through" : ""
+              } heading-3 d-flex align-center gap-sm cursor`}
+            >
+              <input
+                className="check cursor"
+                type="checkbox"
+                onChange={handleCompleteTaskChange}
+                checked={isChecked}
+              />
+              {task}
             </label>
             <button className="cursor" onClick={handleClearClick}>
-              <span class="material-icons-outlined">
-                clear
-              </span>
+              <span class="material-icons-outlined">clear</span>
             </button>
           </div>
         </div>
       )}
       <div className="quote-container">
         <span className="heading-3">{quote}</span>
+      </div>
+      {isTodoOpen && <Todo />}
+      <div className="todo-btn-container absolute">
+        <button className="button cursor todo-btn" onClick={handleToDoClick}>
+          ToDo
+        </button>
       </div>
     </div>
   );
